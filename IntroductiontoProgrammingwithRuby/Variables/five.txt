@@ -1,0 +1,5 @@
+In the first code snippet, x prints 3 to the screen.  In the second code snippet, the following error is raised: 
+
+"NameError: local variable or method 'x' for main:Object".
+
+This is because the variable x is not defined outside the scope of the do..end loop.
