@@ -1,0 +1,5 @@
+# three.txt
+
+arr = [["test","hello","world"],["example","mem"]]
+
+ANSWER: arr.last.first or arr[1][0]
