@@ -1,0 +1,13 @@
+# two.rb
+
+# The #merge method returns the result of merging two hashes without desctructively modifying
+# either hash.  However, if you use the #merge! method like so: arr1.merge(arr2), arr1 will be
+# overwritten by the array returned by arr1.merge(arr2).
+
+
+
+
+
+
+
+
