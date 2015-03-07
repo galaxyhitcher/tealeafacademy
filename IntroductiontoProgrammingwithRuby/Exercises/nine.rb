@@ -14,3 +14,6 @@ puts h.to_s
 
 # Remove all key:value pairs whose value is less than 3.5
 
+h.delete_if {|key,value| value < 3.5}
+
+puts h
