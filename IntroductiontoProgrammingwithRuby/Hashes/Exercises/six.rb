@@ -3,8 +3,13 @@
 words = ['demo', 'none', 'tied', 'evil', 'dome', 'mode', 'live',
          'fowl', 'veil', 'wolf', 'diet', 'vile', 'edit', 'tide',
           'flow', 'neon']
+# eight.rb
 
+arr = %w(Fred Barney Wilma Betty BamBam Pebbles)
 
+arr.sort! {|a,b| a.size <=> b.size}
+
+puts arr.to_s
 def count_letters(word)
 
   alphabet = ["a","b","c","d","e","f","g","h","i",'j',"k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
