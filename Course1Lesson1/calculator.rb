@@ -3,9 +3,6 @@ def speak str
   puts
 end
 
-
-#the while loop condition checks if a and b are integers
-a = String.new
 speak "Please enter integers!"
 
 speak "What is your first number?"
