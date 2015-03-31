@@ -56,6 +56,29 @@ def computer_choice b
   b[empty_positions(b).sample] = 'O'
 end
 
+# checks to see if two in a row
+def two_in_a_row(hsh, mrkr)
+  if hsh.values.count(mrkr) == 2
+    hsh.select{|k,v| v == ' '}.keys.first
+  else
+    false
+  end
+end
+
+def strategic_computer_move board
+  winning_lines = [[1,4,7],[2,5,8],[3,6,9],[1,2,3],[4,5,6],[7,8,9],[1,5,9],[3,5,7]]
+  winning_lines.each do |line|
+    ahsh = Hash.new
+    ahsh[line[0]] = board[line[0]]
+    ahsh[line[1]] = board[line[1]]
+    ahsh[line[2]] = board[line[2]]
+    if two_in_a_row(ahsh,'X')
+      return two_in_a_row(ahsh,'X')
+    end
+  end
+  return false
+end
+
 begin
   
   puts "Choose a position (from 1 to 9) to choose a piece"
@@ -65,11 +88,16 @@ begin
     puts "Please pick an empty position"
     next
   end
+
   board[choice] = 'X'
 
   
   if not winning_message(board)
-    computer_choice(board)
+    if strategic_computer_move board
+      board[strategic_computer_move(board)] = "O"
+    else
+      computer_choice(board)
+    end
   end
 
 end until winning_message(board) || open_squares(board).empty?
