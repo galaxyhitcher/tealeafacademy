@@ -189,14 +189,17 @@ while keep_playing != "N"
   while choice.capitalize != "Stand" && !busted?(player_hand) && !player_blackjack && !dealer_blackjack
 
     puts "Hit or stand?"
+    puts
     choice = gets.chomp
+    puts
     if choice.capitalize == "Hit"
       puts "Dealer has:"
       puts display_hand(dealer_hand)
       puts
       deal_to_hand(player_hand, deck)
     end
-    puts display_hand player_hand
+    puts "Player has: " + display_hand(player_hand)
+    puts 
     puts "Busted!" if busted?(player_hand)
     winner = "dealer" if busted?(player_hand)
   end
@@ -206,15 +209,17 @@ while keep_playing != "N"
       break
     end
     deal_to_hand(dealer_hand,deck)
-    puts display_hand(dealer_hand)
+    puts "Dealer has: " + display_hand(dealer_hand)
+    puts
     if busted?(dealer_hand)
       puts "Dealer busted!"
+      puts
       winner = "player"
     end
   end
 
   if !busted?(dealer_hand) && !dealer_blackjack && !player_blackjack
-    puts display_hand(dealer_hand)
+    puts "Player has: " + display_hand(dealer_hand)
     puts "Dealer won!"
     winner = "dealer"
   end
@@ -224,17 +229,21 @@ while keep_playing != "N"
     puts "Player won!"
   elsif dealer_blackjack
     winner == "dealer"
-    puts display_hand(dealer_hand)
+    puts "Dealer has: " + display_hand(dealer_hand)
+    puts
     puts "Dealer won!"
+    puts
   end
     
 
   if winner == "player"
     player_wallet += 2*bet
   end
-
+  puts
   display_wallet(player_wallet)
+  puts
   puts "Keep playing? (Y/N)"
-
+  puts
   keep_playing = gets.chomp.upcase
+  puts
 end
