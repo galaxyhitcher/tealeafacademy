@@ -51,11 +51,11 @@ def display_hand hand
   hand.each do |card|
     str += card + " "
   end
-  puts str
+  str
 end
 
 def display_dealer_hand hand
-  puts hand[0] + " ??"
+  puts "Dealer has: " + hand[0] + " ??"
 end
 
 def value_of_card card
@@ -126,13 +126,19 @@ def value_of_hand hand
   end
 end
 
-
+puts
 
 puts "How many chips would you like to buy?"
 
+puts
+
 player_wallet = gets.chomp.to_i
 
+puts
+
 display_wallet(player_wallet)
+
+puts
 
 keep_playing = ""
 
@@ -140,11 +146,17 @@ while keep_playing != "N"
 
   puts "How much would you like to bet?"
 
+  puts
+
   bet = gets.chomp.to_i
+
+  puts
 
   player_wallet -= bet
 
   display_wallet(player_wallet)
+
+  puts
 
   winner = ""
 
@@ -168,39 +180,54 @@ while keep_playing != "N"
   end
 
   display_dealer_hand dealer_hand
-  display_hand player_hand
+  puts "Player has: " + display_hand(player_hand)
+
+  puts 
 
   choice = ""
 
-  while choice.capitalize != "Stand" and !busted?(player_hand)
+  while choice.capitalize != "Stand" && !busted?(player_hand) && !player_blackjack && !dealer_blackjack
 
     puts "Hit or stand?"
     choice = gets.chomp
     if choice.capitalize == "Hit"
       puts "Dealer has:"
-      display_hand(dealer_hand)
+      puts display_hand(dealer_hand)
       puts
       deal_to_hand(player_hand, deck)
     end
-    display_hand player_hand
+    puts display_hand player_hand
     puts "Busted!" if busted?(player_hand)
     winner = "dealer" if busted?(player_hand)
   end
 
-  while !busted?(dealer_hand) && value_of_hand(dealer_hand) < value_of_hand(player_hand)
+  while !busted?(dealer_hand) && value_of_hand(dealer_hand) < value_of_hand(player_hand) && !dealer_blackjack && !player_blackjack
+    if busted?(player_hand)
+      break
+    end
     deal_to_hand(dealer_hand,deck)
-    display_hand(dealer_hand)
+    puts display_hand(dealer_hand)
     if busted?(dealer_hand)
       puts "Dealer busted!"
       winner = "player"
     end
   end
 
-  if !busted?(dealer_hand)
-    display_hand(dealer_hand)
+  if !busted?(dealer_hand) && !dealer_blackjack && !player_blackjack
+    puts display_hand(dealer_hand)
     puts "Dealer won!"
     winner = "dealer"
   end
+
+  if player_blackjack && !dealer_blackjack
+    winner == "player"
+    puts "Player won!"
+  elsif dealer_blackjack
+    winner == "dealer"
+    puts display_hand(dealer_hand)
+    puts "Dealer won!"
+  end
+    
 
   if winner == "player"
     player_wallet += 2*bet
