@@ -144,6 +144,10 @@ deck = make_five_shuffled_decks
 
 puts
 
+puts "Welcome to Blackjack!"
+
+puts
+
 puts "What is your name?"
 
 puts
@@ -250,12 +254,12 @@ while keep_playing != "N" && !deck.empty?
 
   if player_blackjack && !dealer_blackjack
     winner == "player"
-    puts "Player won!"
+    puts "Player blackjack!"
   elsif dealer_blackjack
     winner == "dealer"
     show_hand("dealer",dealer_hand)
     puts
-    puts "Dealer won!"
+    puts "Dealer blackjack!"
     puts
   end
     
