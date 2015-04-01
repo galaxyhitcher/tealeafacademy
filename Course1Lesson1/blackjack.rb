@@ -126,6 +126,30 @@ def value_of_hand hand
   end
 end
 
+def show_hand(player,hand)
+  puts player.capitalize + " has: " + display_hand(hand)
+end
+
+# add 5 decks together and shuffle
+def make_five_shuffled_decks
+  deck = Array.new 
+  5.times do |i|
+    deck = deck + initialize_deck
+  end
+
+  deck.shuffle!
+end
+
+deck = make_five_shuffled_decks
+
+puts
+
+puts "What is your name?"
+
+puts
+
+player_name = gets.chomp
+
 puts
 
 puts "How many chips would you like to buy?"
@@ -142,7 +166,7 @@ puts
 
 keep_playing = ""
 
-while keep_playing != "N"
+while keep_playing != "N" && !deck.empty?
 
   puts "How much would you like to bet?"
 
@@ -160,7 +184,8 @@ while keep_playing != "N"
 
   winner = ""
 
-  deck = initialize_deck.shuffle!
+  # combines 5 decks together and then shuffles them
+
 
   dealer_hand = Array.new
 
@@ -180,7 +205,7 @@ while keep_playing != "N"
   end
 
   display_dealer_hand dealer_hand
-  puts "Player has: " + display_hand(player_hand)
+  show_hand(player_name, player_hand)
 
   puts 
 
@@ -193,12 +218,11 @@ while keep_playing != "N"
     choice = gets.chomp
     puts
     if choice.capitalize == "Hit"
-      puts "Dealer has:"
-      puts display_hand(dealer_hand)
+      show_hand("dealer", dealer_hand)
       puts
       deal_to_hand(player_hand, deck)
     end
-    puts "Player has: " + display_hand(player_hand)
+    show_hand(player_name, player_hand)
     puts 
     puts "Busted!" if busted?(player_hand)
     winner = "dealer" if busted?(player_hand)
@@ -209,7 +233,7 @@ while keep_playing != "N"
       break
     end
     deal_to_hand(dealer_hand,deck)
-    puts "Dealer has: " + display_hand(dealer_hand)
+    show_hand("dealer",dealer_hand)
     puts
     if busted?(dealer_hand)
       puts "Dealer busted!"
@@ -219,7 +243,7 @@ while keep_playing != "N"
   end
 
   if !busted?(dealer_hand) && !dealer_blackjack && !player_blackjack
-    puts "Player has: " + display_hand(dealer_hand)
+    show_hand("dealer",dealer_hand)
     puts "Dealer won!"
     winner = "dealer"
   end
@@ -229,7 +253,7 @@ while keep_playing != "N"
     puts "Player won!"
   elsif dealer_blackjack
     winner == "dealer"
-    puts "Dealer has: " + display_hand(dealer_hand)
+    show_hand("dealer",dealer_hand)
     puts
     puts "Dealer won!"
     puts
@@ -242,8 +266,16 @@ while keep_playing != "N"
   puts
   display_wallet(player_wallet)
   puts
+
+  if deck.empty?
+    puts "The shoe is out of cards, reshuffling..."
+    deck = make_five_shuffled_decks
+  end
+
   puts "Keep playing? (Y/N)"
   puts
   keep_playing = gets.chomp.upcase
   puts
+
 end
+
