@@ -253,13 +253,18 @@ while keep_playing != "N" && !deck.empty?
   end
 
   if player_blackjack && !dealer_blackjack
-    winner == "player"
+    winner = "player"
     puts "Player blackjack!"
   elsif dealer_blackjack
-    winner == "dealer"
+    winner = "dealer"
     show_hand("dealer",dealer_hand)
     puts
     puts "Dealer blackjack!"
+    puts
+  elsif player_blackjack && dealer_blackjack
+    winner = 'dealer'
+    show_hand("dealer",dealer_hand)
+    puts "Both " + player_name + " and dealer have blackjack, but the dealer wins..."
     puts
   end
     
