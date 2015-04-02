@@ -32,13 +32,6 @@ def initialize_deck
   deck
 end
 
-def say phrase
-  puts
-  puts phrase
-  puts
-end
-
-
 def get_card_from_deck deck
   pick = deck.sample
   deck.delete_at(deck.find_index(pick))
@@ -50,7 +43,7 @@ def deal_to_hand(hand,deck)
 end
 
 def display_wallet wallet
-  "You currently have " + wallet.to_s + " dollars."
+  puts "You currently have " + wallet.to_s + " dollars."
 end
 
 def display_hand hand
@@ -134,7 +127,7 @@ def value_of_hand hand
 end
 
 def show_hand(player,hand)
-  player.capitalize + " has: " + display_hand(hand)
+  puts player.capitalize + " has: " + display_hand(hand)
 end
 
 # add 5 decks together and shuffle
@@ -147,43 +140,51 @@ def make_five_shuffled_decks
   deck.shuffle!
 end
 
-def get_bet wallet
-  bet = gets.chomp.to_i
-  while bet > wallet
-    say "Not enough money in wallet, how much do you want to bet?"
-    bet = gets.chomp.to_i
-  end
-  bet
-end
-
 deck = make_five_shuffled_decks
 
-say "Welcome to Blackjack!"
+puts
 
-say "What is your name?"
+puts "Welcome to Blackjack!"
+
+puts
+
+puts "What is your name?"
+
+puts
 
 player_name = gets.chomp
 
-say "How many chips would you like to buy?"
+puts
+
+puts "How many chips would you like to buy?"
+
+puts
 
 player_wallet = gets.chomp.to_i
 
-say display_wallet(player_wallet)
+puts
 
+display_wallet(player_wallet)
+
+puts
 
 keep_playing = ""
 
 while keep_playing != "N" && !deck.empty?
 
-  say "How much would you like to bet?"
+  puts "How much would you like to bet?"
 
-  bet = get_bet player_wallet
+  puts
+
+  bet = gets.chomp.to_i
 
   puts
 
   player_wallet -= bet
 
-  say display_wallet(player_wallet)
+  display_wallet(player_wallet)
+
+  puts
 
   winner = ""
 
@@ -208,24 +209,24 @@ while keep_playing != "N" && !deck.empty?
   end
 
   display_dealer_hand dealer_hand
-  say show_hand(player_name, player_hand)
+  show_hand(player_name, player_hand)
+
+  puts 
 
   choice = ""
 
   while choice.capitalize != "Stand" && !busted?(player_hand) && !player_blackjack && !dealer_blackjack
 
-    say "Hit or stand?"
-
-    choice = gets.chomp
-
+    puts "Hit or stand?"
     puts
-
+    choice = gets.chomp
+    puts
     if choice.capitalize == "Hit"
-      say show_hand("dealer", dealer_hand)
-  
+      show_hand("dealer", dealer_hand)
+      puts
       deal_to_hand(player_hand, deck)
     end
-    say show_hand(player_name, player_hand)
+    show_hand(player_name, player_hand)
     puts 
     puts "Busted!" if busted?(player_hand)
     winner = "dealer" if busted?(player_hand)
@@ -236,49 +237,53 @@ while keep_playing != "N" && !deck.empty?
       break
     end
     deal_to_hand(dealer_hand,deck)
-    say show_hand("dealer",dealer_hand)
+    show_hand("dealer",dealer_hand)
+    puts
     if busted?(dealer_hand)
-      say "Dealer busted!"
-
+      puts "Dealer busted!"
+      puts
       winner = "player"
     end
   end
 
   if !busted?(dealer_hand) && !dealer_blackjack && !player_blackjack
     show_hand("dealer",dealer_hand)
-    say "Dealer won!"
+    puts "Dealer won!"
     winner = "dealer"
   end
 
   if player_blackjack && !dealer_blackjack
     winner = "player"
-    say "Player blackjack!"
+    puts "Player blackjack!"
   elsif dealer_blackjack
     winner = "dealer"
-    say show_hand("dealer",dealer_hand)
-    say "Dealer Blackjack!"
+    show_hand("dealer",dealer_hand)
+    puts
+    puts "Dealer blackjack!"
+    puts
   elsif player_blackjack && dealer_blackjack
     winner = 'dealer'
-    say show_hand("dealer",dealer_hand)
-    say "Both " + player_name + " and dealer have blackjack, but the dealer wins..."
+    show_hand("dealer",dealer_hand)
+    puts "Both " + player_name + " and dealer have blackjack, but the dealer wins..."
+    puts
   end
     
 
   if winner == "player"
     player_wallet += 2*bet
   end
-
-  say display_wallet(player_wallet)
+  puts
+  display_wallet(player_wallet)
+  puts
 
   if deck.empty?
-    say "The shoe is out of cards, reshuffling..."
+    puts "The shoe is out of cards, reshuffling..."
     deck = make_five_shuffled_decks
   end
 
-  say "Keep playing? (Y/N)"
+  puts "Keep playing? (Y/N)"
   puts
   keep_playing = gets.chomp.upcase
   puts
 
 end
-
