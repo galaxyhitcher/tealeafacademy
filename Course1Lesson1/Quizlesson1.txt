@@ -1,0 +1,24 @@
+Quiz: Lesson 1
+
+1.) a = 1
+
+1.) An Array is a list of items which preserves the order of the items.  A Hash is a collection of key, value pairs
+which does not preserve order.  A Hash functions as a dictionary.
+
+2.)  
+
+=> [1,2,3,3]
+
+=> [1,2,3]
+
+=> [1,2,3]
+
+3.) map and select both iterate through an array of elements.  select returns an array which returns values which return true for block in condition.
+
+4.) new_hash = {"a"=>"three","b"=>"four"}
+
+5.) "no way!"
+
+6.) x = 4
+
+7.) produces an error because x is not initialized
