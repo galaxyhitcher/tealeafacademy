@@ -17,19 +17,26 @@
 
 # if player wins, his bet is doubled and his money is returned to his wallet
 
-ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
-suits = ["H","D","C","S"]
+require 'pry'
+
+RANKS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
+SUITS = ["H","D","C","S"]
+BLACKJACK = 21
 
 def initialize_deck
-  deck = Array.new
-  ranks = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
-  suits = ["H","D","C","S"]
-  ranks.each do |rank|
-    suits.each do |suit|
+  deck = []
+  RANKS.each do |rank|
+    SUITS.each do |suit|
       deck << rank + suit
     end
   end
   deck
+end
+
+def say(phrase)
+  puts 
+  puts phrase
+  puts
 end
 
 def get_card_from_deck deck
@@ -43,7 +50,7 @@ def deal_to_hand(hand,deck)
 end
 
 def display_wallet wallet
-  puts "You currently have " + wallet.to_s + " dollars."
+  "You currently have " + wallet.to_s + " dollars."
 end
 
 def display_hand hand
@@ -55,7 +62,7 @@ def display_hand hand
 end
 
 def display_dealer_hand hand
-  puts "Dealer has: " + hand[0] + " ??"
+  "Dealer has: " + hand[0] + " ??"
 end
 
 def value_of_card card
@@ -89,7 +96,7 @@ def count_aces hand
 end
 
 def busted? hand
-  if value_of_hand(hand) <= 21
+  if value_of_hand(hand) <= BLACKJACK
     return false
   else
     return true
@@ -127,7 +134,7 @@ def value_of_hand hand
 end
 
 def show_hand(player,hand)
-  puts player.capitalize + " has: " + display_hand(hand)
+  player.capitalize + " has: " + display_hand(hand)
 end
 
 # add 5 decks together and shuffle
@@ -140,15 +147,30 @@ def make_five_shuffled_decks
   deck.shuffle!
 end
 
+def get_bet(wallet)
+  puts
+
+  bet = gets.chomp.to_i
+
+  puts
+
+  while bet > wallet
+    say "Not enough money in your wallet, how much do you want to bet?"
+
+    bet = gets.chomp.to_i
+  end
+
+  bet
+end
+
+
 deck = make_five_shuffled_decks
 
 puts
 
-puts "Welcome to Blackjack!"
+say "Welcome to Blackjack!"
 
-puts
-
-puts "What is your name?"
+say "What is your name?"
 
 puts
 
@@ -156,7 +178,7 @@ player_name = gets.chomp
 
 puts
 
-puts "How many chips would you like to buy?"
+say "How many chips would you like to buy?"
 
 puts
 
@@ -164,71 +186,63 @@ player_wallet = gets.chomp.to_i
 
 puts
 
-display_wallet(player_wallet)
-
-puts
-
 keep_playing = ""
 
 while keep_playing != "N" && !deck.empty?
 
-  puts "How much would you like to bet?"
+  say display_wallet player_wallet
 
-  puts
+  say "How much would you like to bet?"
 
-  bet = gets.chomp.to_i
-
-  puts
+  bet = get_bet(player_wallet)
 
   player_wallet -= bet
-
-  display_wallet(player_wallet)
-
-  puts
 
   winner = ""
 
   # combines 5 decks together and then shuffles them
 
 
-  dealer_hand = Array.new
+  dealer_hand = []
 
-  player_hand = Array.new
+  player_hand = []
 
   2.times do
     deal_to_hand(player_hand, deck)
     deal_to_hand(dealer_hand, deck)
   end
 
-  if value_of_hand(player_hand) == 21
+  if value_of_hand(player_hand) == BLACKJACK
     player_blackjack = true
   end
 
-  if value_of_hand(dealer_hand) == 21
+  if value_of_hand(dealer_hand) == BLACKJACK
     dealer_blackjack = true
   end
 
-  display_dealer_hand dealer_hand
-  show_hand(player_name, player_hand)
-
-  puts 
+  say display_dealer_hand dealer_hand
+  say show_hand(player_name, player_hand) 
 
   choice = ""
 
   while choice.capitalize != "Stand" && !busted?(player_hand) && !player_blackjack && !dealer_blackjack
 
-    puts "Hit or stand?"
+    say "Hit or stand?"
+
     puts
+   
     choice = gets.chomp
+
     puts
+    
     if choice.capitalize == "Hit"
-      show_hand("dealer", dealer_hand)
-      puts
+      say show_hand("dealer", dealer_hand)
+      
       deal_to_hand(player_hand, deck)
     end
-    show_hand(player_name, player_hand)
-    puts 
-    puts "Busted!" if busted?(player_hand)
+    say show_hand(player_name, player_hand)
+    
+    say "Busted!" if busted?(player_hand)
     winner = "dealer" if busted?(player_hand)
   end
 
@@ -237,53 +251,56 @@ while keep_playing != "N" && !deck.empty?
       break
     end
     deal_to_hand(dealer_hand,deck)
-    show_hand("dealer",dealer_hand)
-    puts
+    say show_hand("dealer",dealer_hand)
     if busted?(dealer_hand)
-      puts "Dealer busted!"
-      puts
+      say "Dealer busted!"
+      say display_wallet player_wallet
       winner = "player"
     end
   end
 
   if !busted?(dealer_hand) && !dealer_blackjack && !player_blackjack
-    show_hand("dealer",dealer_hand)
-    puts "Dealer won!"
+    say show_hand("dealer",dealer_hand)
+    say "Dealer won!"
+    say display_wallet player_wallet
     winner = "dealer"
   end
 
   if player_blackjack && !dealer_blackjack
     winner = "player"
-    puts "Player blackjack!"
+    say player_name + " blackjack!"
+    say display_wallet player_wallet
   elsif dealer_blackjack
     winner = "dealer"
-    show_hand("dealer",dealer_hand)
-    puts
-    puts "Dealer blackjack!"
-    puts
+    say show_hand("dealer",dealer_hand)
+    say "Dealer Blackjack!"
+    say player_name + "loses..."
+    say display_wallet player_wallet
   elsif player_blackjack && dealer_blackjack
     winner = 'dealer'
-    show_hand("dealer",dealer_hand)
-    puts "Both " + player_name + " and dealer have blackjack, but the dealer wins..."
-    puts
+    say show_hand("dealer",dealer_hand)
+    say "Both " + player_name + " and dealer have blackjack, but the dealer wins..."
+    say display_wallet player_wallet
   end
     
 
   if winner == "player"
     player_wallet += 2*bet
   end
-  puts
+  
   display_wallet(player_wallet)
-  puts
+  
 
   if deck.empty?
-    puts "The shoe is out of cards, reshuffling..."
+    say "The shoe is out of cards, reshuffling..."
     deck = make_five_shuffled_decks
   end
 
-  puts "Keep playing? (Y/N)"
+  say "Keep playing? (Y/N)"
+
   puts
+  
   keep_playing = gets.chomp.upcase
-  puts
+  2.times {puts}
 
 end
