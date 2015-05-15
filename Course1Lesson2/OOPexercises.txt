@@ -1,7 +1,10 @@
+
 The Object Model
 
 1.) An object can be created by defining a class, and instantiating an instance
 by using the .new method to create an instance, also known as an object.
+
+
 
 2.) A module allows us to group reusable code into one place.  Modules can be
 used in classes by using the include reserved word, followed by the module name.
