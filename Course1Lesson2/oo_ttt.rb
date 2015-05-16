@@ -12,14 +12,14 @@ end
 class Player < Competitor
     attr_accessor :symbol
     def initialize
-        @symbol = 'x'
+      @symbol = 'x'
     end
 end
 
 class Computer < Competitor
     attr_accessor :symbol
     def initialize
-        @symbol = 'o'
+      @symbol = 'o'
     end
 end
 
@@ -76,22 +76,22 @@ class Game
 	end
 
 	def win?
-	    if combo(0,1,2) || combo(3,4,5) || combo(6,7,8) || combo(0,3,6) || combo(1,4,7) || combo(2,5,8) || combo(0,4,8) || combo(2,4,6)
-	        true
-	    else
-	        false
-	    end
+    if combo(0,1,2) || combo(3,4,5) || combo(6,7,8) || combo(0,3,6) || combo(1,4,7) || combo(2,5,8) || combo(0,4,8) || combo(2,4,6)
+	    true
+	  else
+	    false
+	  end
 	end
 	
 	def tied?
-	    if !win?
-	        @gameboard.state.each do |pos|
-	            if pos == ' '
-	                return false
-	            end
-	        end
-	        true
+    if !win?
+      @gameboard.state.each do |pos|
+        if pos == ' '
+	        return false
+	      end
 	    end
+	    true
+	  end
 	end
 
 
