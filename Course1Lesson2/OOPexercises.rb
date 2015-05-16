@@ -28,13 +28,45 @@ teddy = Bear.new
 
 # Classes and Objects Part 1
 
+# 1.)
+
 class MyCar
   def initialize(year,color,model)
-    self.year = year
-    self.color = color
-    self.model = model
+    @year = year
+    @color = color
+    @model = model
+    @current_speed = 0
+  end
+
+  def speed_up(number)
+    @current_speed += number
+    puts "You push the gas and accelerate #{number} mph."
+  end
+
+  def brake(number)
+    @current_speed -= number
+    puts "You push the brake and decelerate #{number} mph."
+  end
+
+  def current_speed
+    puts "You are now going #{@current_speed} mph."
+  end
+
+  def shut_down
+    @current_speed = 0
+    puts "Let's park this bad boy!"
+  end
+
+  def change_and_view_color(new_color=false)
+    puts "the color of the car is #{@color}."
+    if new_color
+      @color = new_color
+    end
+    puts "the new color of the car is #{@color}."
   end
 end
 
 herbie = MyCar.new 1991 "yellow" "VW Bug"
+
+herbie.change_and_view_color("red")
 
