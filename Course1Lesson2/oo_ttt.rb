@@ -163,29 +163,18 @@ class Game
   end
 
   def play
-
     print_gameboard
-
     until game_ended?
-
       player_marks_board
-
       check_for_winner("human")
-
       if game_over_point?
         break
-      end
-      
+      end      
       computer_marks_board
-
       check_for_winner("computer")
-
       self.gameboard.print
-
     end
-
     self.print_endgame_info
-
   end
 end
 
