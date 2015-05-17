@@ -112,7 +112,7 @@ battle.gameboard.print
 
 until battle.win? || battle.tied? || input.to_s.upcase == 'Q'
 
-	puts "Where do you want to move?"
+  puts "Where do you want to move?"
 	input = gets.chomp.to_i
 
 	system "clear"
@@ -153,7 +153,7 @@ if winner
 
 else
 
-	puts "Cat's game."
+  puts "Cat's game."
 
 end
 
