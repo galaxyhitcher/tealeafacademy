@@ -5,8 +5,8 @@ class Competitor
   end
 
   def mark_board(board,pos)
-   	board.mark(pos,@symbol)
-	end
+    board.mark(pos,@symbol)
+  end
 end
 
 class Player < Competitor
@@ -24,19 +24,19 @@ class Computer < Competitor
 end
 
 class Board
-	attr_accessor :state
+  attr_accessor :state
 
-	def initialize
-		@state = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
-	end
+  def initialize
+    @state = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+  end
 
-	def print
-		puts @state[0] +'|'+ @state[1] +'|' + @state[2] 
-		puts '_____'
-		puts @state[3] +'|'+ @state[4] +'|' + @state[5] 
-		puts '_____'
-		puts @state[6] +'|'+ @state[7] +'|' + @state[8] 
-	end
+  def print
+    puts @state[0] +'|'+ @state[1] +'|' + @state[2] 
+    puts '_____'
+    puts @state[3] +'|'+ @state[4] +'|' + @state[5] 
+    puts '_____'
+    puts @state[6] +'|'+ @state[7] +'|' + @state[8] 
+  end
 
 	def mark(pos,marker)
 		@state[pos] = marker
