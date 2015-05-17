@@ -112,43 +112,43 @@ battle.gameboard.print
 until battle.win? || battle.tied? || input.to_s.upcase == 'Q'
 
   puts "Where do you want to move?"
-	input = gets.chomp.to_i
+  input = gets.chomp.to_i
 
-	system "clear"
+  system "clear"
 
-	while !battle.gameboard.available_moves.include?(input - 1)
-		puts "That space is invalid or already taken."
-		input = gets.chomp.to_i
-	end
+  while !battle.gameboard.available_moves.include?(input - 1)
+    puts "That space is invalid or already taken."
+    input = gets.chomp.to_i
+  end
 
-	human.mark_board(battle.gameboard, input - 1)
-	
-	
-	if battle.win?
-		winner = "human"
-		break
-	elsif battle.tied?
-		break
-	end
+  human.mark_board(battle.gameboard, input - 1)
 
-	comp.mark_board(battle.gameboard, battle.gameboard.available_moves.sample)
 
-	if battle.win?
-		winner = "computer"
-		break
-	elsif battle.tied?
-		break
-	end
+  if battle.win?
+    winner = "human"
+    break
+  elsif battle.tied?
+    break
+  end
 
-	battle.gameboard.print
+  comp.mark_board(battle.gameboard, battle.gameboard.available_moves.sample)
+
+  if battle.win?
+    winner = "computer"
+    break
+  elsif battle.tied?
+    break
+  end
+
+  battle.gameboard.print
 
 end
 
 if winner
 
-	battle.gameboard.print
+  battle.gameboard.print
 
-	puts winner.capitalize + " won!"
+  puts winner.capitalize + " won!"
 
 else
 
