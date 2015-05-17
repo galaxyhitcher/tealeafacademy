@@ -1,8 +1,8 @@
 class Competitor
   attr_accessor :symbol
-	def initialize(symbol)
-		@symbol = symbol
-	end
+  def initialize(symbol)
+    @symbol = symbol
+  end
 
   def mark_board(board,pos)
    	board.mark(pos,@symbol)
