@@ -55,15 +55,17 @@ class Board
     available_moves
 
   end
-
 end
 
 class Game
-  attr_accessor :completed, :gameboard, :turn
+  attr_accessor :gameboard, :winner, :input, :human, :comp
 
   def initialize
-    @completed = false
     @gameboard = Board.new
+    @winner = false
+    @input = false
+    @human = Player.new
+    @comp = Computer.new
   end
 
   def combo(a,b,c)
@@ -83,6 +85,8 @@ class Game
     end
   end
 
+
+
   def tied?
     if !win?
       @gameboard.state.each do |pos|
@@ -94,67 +98,66 @@ class Game
     end
   end
 
+  def print_endgame_info
+    system "clear"
+    self.gameboard.print
+    if self.win?
+      puts self.winner.capitalize + " won!"
+    else
+      puts "Cat's Game"
+    end
+  end
+
+  def get_player_input
+    puts "Where do you want to move?"
+    self.input = gets.chomp.to_i
+
+    system "clear"
+  end
+
+  def set_winner_if_game_ended(winner)
+    if self.win?
+      self.winner = winner
+      return true
+    end
+    false
+  end
+
+  def play
+    self.gameboard.print
+    until self.win? || self.tied? || self.input.to_s.upcase == 'Q'
+      self.get_player_input
+
+      while !self.gameboard.available_moves.include?(self.input - 1)
+        puts "That space is invalid or already taken."
+        self.gameboard.print
+        self.input = gets.chomp.to_i
+      end
+
+      self.human.mark_board(self.gameboard, self.input - 1)
+
+      if self.set_winner_if_game_ended("human")
+        break
+      end
+
+      unless self.gameboard.available_moves.sample == nil
+        comp.mark_board(self.gameboard, self.gameboard.available_moves.sample)
+      end
+
+      self.set_winner_if_game_ended("computer")
+
+      self.gameboard.print
+    end
+
+    self.print_endgame_info
+  end
 end
-	
 
 battle = Game.new
 
-winner = false
+battle.play
+	
 
-human = Player.new
-
-comp = Computer.new
-
-input = ' '
-
-battle.gameboard.print
-
-until battle.win? || battle.tied? || input.to_s.upcase == 'Q'
-
-  puts "Where do you want to move?"
-  input = gets.chomp.to_i
-
-  system "clear"
-
-  while !battle.gameboard.available_moves.include?(input - 1)
-    puts "That space is invalid or already taken."
-    input = gets.chomp.to_i
-  end
-
-  human.mark_board(battle.gameboard, input - 1)
-
-
-  if battle.win?
-    winner = "human"
-    break
-  elsif battle.tied?
-    break
-  end
-
-  comp.mark_board(battle.gameboard, battle.gameboard.available_moves.sample)
-
-  if battle.win?
-    winner = "computer"
-    break
-  elsif battle.tied?
-    break
-  end
-
-  battle.gameboard.print
-
-end
-
-if winner
-
-  battle.gameboard.print
-
-  puts winner.capitalize + " won!"
-
-else
-
-  puts "Cat's game."
-
-end
 
 
 
