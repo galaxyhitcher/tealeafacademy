@@ -89,7 +89,7 @@ class Game
 
   def tied?
     if !win?
-      @gameboard.state.each do |pos|
+      self.gameboard.state.each do |pos|
         if pos == ' '
           return false
         end
@@ -115,41 +115,77 @@ class Game
     system "clear"
   end
 
-  def set_winner_if_game_ended(winner)
-    if self.win?
-      self.winner = winner
+  
+
+  def game_ended?
+    if self.win? || self.tied?
       return true
     end
     false
   end
 
-  def play
+  def valid_move?
+    if self.gameboard.available_moves.include?(self.input - 1)
+      true
+    else
+      false
+    end
+  end
+
+  def game_over_point?
+    if self.game_ended?
+      true
+    end
+  end
+
+  def check_for_winner(winner)
+    if self.win?
+      self.winner = winner
+    end
+  end
+
+  def print_gameboard
     self.gameboard.print
-    until self.win? || self.tied? || self.input.to_s.upcase == 'Q'
-      self.get_player_input
+  end
 
-      while !self.gameboard.available_moves.include?(self.input - 1)
-        puts "That space is invalid or already taken."
-        self.gameboard.print
-        self.input = gets.chomp.to_i
-      end
+  def player_marks_board
+    self.get_player_input
+    while !valid_move? && !self.tied?
+      puts "That space is invalid or already taken."
+      self.gameboard.print
+      self.input = gets.chomp.to_i
+    end
+    self.human.mark_board(self.gameboard, self.input - 1)
+  end
 
-      self.human.mark_board(self.gameboard, self.input - 1)
+  def computer_marks_board
+    comp.mark_board(self.gameboard, self.gameboard.available_moves.sample)
+  end
 
-      if self.set_winner_if_game_ended("human")
+  def play
+
+    print_gameboard
+
+    until game_ended?
+
+      player_marks_board
+
+      check_for_winner("human")
+
+      if game_over_point?
         break
       end
+      
+      computer_marks_board
 
-      unless self.gameboard.available_moves.sample == nil
-        comp.mark_board(self.gameboard, self.gameboard.available_moves.sample)
-      end
-
-      self.set_winner_if_game_ended("computer")
+      check_for_winner("computer")
 
       self.gameboard.print
+
     end
 
     self.print_endgame_info
+
   end
 end
 
