@@ -162,19 +162,27 @@ class Game
     comp.mark_board(self.gameboard, self.gameboard.available_moves.sample)
   end
 
+  def player_turn
+    player_marks_board
+    check_for_winner("human")
+  end
+
+  def computer_turn
+    computer_marks_board
+    check_for_winner("computer")
+  end
+
   def play
     print_gameboard
     until game_ended?
-      player_marks_board
-      check_for_winner("human")
+      player_turn
       if game_over_point?
         break
       end      
-      computer_marks_board
-      check_for_winner("computer")
-      self.gameboard.print
+      computer_turn
+      print_gameboard
     end
-    self.print_endgame_info
+    print_endgame_info
   end
 end
 
