@@ -10,17 +10,17 @@ class Competitor
 end
 
 class Player < Competitor
-    attr_accessor :symbol
-    def initialize
-      @symbol = 'x'
-    end
+  attr_accessor :symbol
+  def initialize
+    @symbol = 'x'
+  end
 end
 
 class Computer < Competitor
-    attr_accessor :symbol
-    def initialize
-      @symbol = 'o'
-    end
+  attr_accessor :symbol
+  def initialize
+    @symbol = 'o'
+  end
 end
 
 class Board
@@ -38,62 +38,61 @@ class Board
     puts @state[6] +'|'+ @state[7] +'|' + @state[8] 
   end
 
-	def mark(pos,marker)
-		@state[pos] = marker
-	end
+  def mark(pos,marker)
+    @state[pos] = marker
+  end
 
-	def available_moves
+  def available_moves
 
-		available_moves = []
+    available_moves = []
 
-		(0..8).each do |i|
-			if self.state[i] == ' '
-				available_moves << i
-			end
-		end
+    (0..8).each do |i|
+      if self.state[i] == ' '
+        available_moves << i
+      end
+    end
 
-		available_moves
+    available_moves
 
-	end
+  end
 
 end
 
 class Game
-	attr_accessor :completed, :gameboard, :turn
+  attr_accessor :completed, :gameboard, :turn
 
-	def initialize
-		@completed = false
-		@gameboard = Board.new
-	end
+  def initialize
+    @completed = false
+    @gameboard = Board.new
+  end
 
-	def combo(a,b,c)
-	    a, b, c = a.to_i, b.to_i, c.to_i
-	    if @gameboard.state[a] == @gameboard.state[b] && @gameboard.state[b] == @gameboard.state[c] && @gameboard.state[a] != ' '
-	      true
-	    else
-	      false
-	    end
-	end
+  def combo(a,b,c)
+    a, b, c = a.to_i, b.to_i, c.to_i
+    if @gameboard.state[a] == @gameboard.state[b] && @gameboard.state[b] == @gameboard.state[c] && @gameboard.state[a] != ' '
+      true
+    else
+      false
+    end
+  end
 
-	def win?
+  def win?
     if combo(0,1,2) || combo(3,4,5) || combo(6,7,8) || combo(0,3,6) || combo(1,4,7) || combo(2,5,8) || combo(0,4,8) || combo(2,4,6)
-	    true
-	  else
-	    false
-	  end
-	end
-	
-	def tied?
+      true
+    else
+      false
+    end
+  end
+
+  def tied?
     if !win?
       @gameboard.state.each do |pos|
         if pos == ' '
-	        return false
-	      end
-	    end
-	    true
-	  end
-	end
-
+          return false
+        end
+      end
+      true
+    end
+  end
 
 end
 	
