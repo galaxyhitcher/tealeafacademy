@@ -70,19 +70,11 @@ class Game
 
   def combo(a,b,c)
     a, b, c = a.to_i, b.to_i, c.to_i
-    if @gameboard.state[a] == @gameboard.state[b] && @gameboard.state[b] == @gameboard.state[c] && @gameboard.state[a] != ' '
-      true
-    else
-      false
-    end
+    @gameboard.state[a] == @gameboard.state[b] && @gameboard.state[b] == @gameboard.state[c] && @gameboard.state[a] != ' '
   end
 
   def win?
-    if combo(0,1,2) || combo(3,4,5) || combo(6,7,8) || combo(0,3,6) || combo(1,4,7) || combo(2,5,8) || combo(0,4,8) || combo(2,4,6)
-      true
-    else
-      false
-    end
+    combo(0,1,2) || combo(3,4,5) || combo(6,7,8) || combo(0,3,6) || combo(1,4,7) || combo(2,5,8) || combo(0,4,8) || combo(2,4,6)
   end
 
 
