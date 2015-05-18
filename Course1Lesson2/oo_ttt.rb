@@ -168,9 +168,7 @@ class Game
     print_gameboard
     until game_ended?
       player_turn
-      if game_over_point?
-        break
-      end      
+      break if game_over_point?    
       computer_turn
       print_gameboard
     end

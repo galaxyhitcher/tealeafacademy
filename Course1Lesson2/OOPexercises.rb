@@ -10,7 +10,7 @@ teddy = Bear.new
 
 
 
-# 2.) A module allows us to group reusable code into one place.  Modules can be
+# 2&3.) A module allows us to group reusable code into one place.  Modules can be
 # used in classes by using the include reserved word, followed by the module name.
 # Modules are used as a namespace.
 
@@ -31,6 +31,8 @@ teddy = Bear.new
 # 1.)
 
 class MyCar
+  attr_accessor :color
+  attr_reader :year
   def initialize(year,color,model)
     @year = year
     @color = color
@@ -57,13 +59,11 @@ class MyCar
     puts "Let's park this bad boy!"
   end
 
-  def change_and_view_color(new_color=false)
-    puts "the color of the car is #{@color}."
-    if new_color
-      @color = new_color
-    end
-    puts "the new color of the car is #{@color}."
+  def spray_paint(color)
+    self.color = color
+    puts "Your new #{color} paint job looks great"
   end
+
 end
 
 herbie = MyCar.new 1991 "yellow" "VW Bug"
