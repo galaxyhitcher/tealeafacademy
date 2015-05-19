@@ -77,17 +77,12 @@ class Game
     combo(0,1,2) || combo(3,4,5) || combo(6,7,8) || combo(0,3,6) || combo(1,4,7) || combo(2,5,8) || combo(0,4,8) || combo(2,4,6)
   end
 
-
+  def board_full?
+    !self.gameboard.state.include?(' ')
+  end
 
   def tied?
-    if !win?
-      self.gameboard.state.each do |pos|
-        if pos == ' '
-          return false
-        end
-      end
-      true
-    end
+    board_full? && !win?
   end
 
   def print_endgame_info
