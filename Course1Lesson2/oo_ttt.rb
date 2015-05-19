@@ -110,24 +110,15 @@ class Game
   
 
   def game_ended?
-    if self.win? || self.tied?
-      return true
-    end
-    false
+    self.win? || self.tied?
   end
 
   def valid_move?
-    if self.gameboard.available_moves.include?(self.input - 1)
-      true
-    else
-      false
-    end
+    self.gameboard.available_moves.include?(self.input - 1)
   end
 
   def game_over_point?
-    if self.game_ended?
-      true
-    end
+    self.game_ended?
   end
 
   def check_for_winner(winner)
