@@ -26,18 +26,36 @@ end
 
 teddy = Bear.new
 
-# Classes and Objects Part 1
+# Classes and Objects Part 1 and Part 2
 
 # 1.)
+module Towable
+  def can_tow?(pounds)
+    pounds < 2000 ? true : false
+  end
+end
 
-class MyCar
+class Vehicle
   attr_accessor :color
-  attr_reader :year
-  def initialize(year,color,model)
+  attr_reader :model, :year
+  @@number_of_vehicles = 0
+
+  def initialize(year, model, color)
     @year = year
-    @color = color
     @model = model
+    @color = color
     @current_speed = 0
+    @@number_of_vehicles += 1
+  end
+
+  def age
+    "Your #{self.model} is #{years_old} years old."
+  end
+
+  private
+
+  def years_old
+    Time.now.year - self.year
   end
 
   def speed_up(number)
@@ -55,18 +73,66 @@ class MyCar
   end
 
   def shut_down
-    @current_speed = 0
     puts "Let's park this bad boy!"
+  end
+
+  def self.gas_mileage(gallons, miles)
+    puts "#{miles / gallons} miles per gallon of gas"
   end
 
   def spray_paint(color)
     self.color = color
-    puts "Your new #{color} paint job looks great"
+    puts "You new #{color} paint job looks great!"
+  end
+end
+
+class MyTruck < Vehicle
+  include Towable
+
+  NUMBER_OF_DOORS = 2
+
+  def to_s
+    "My truck  is a #{self.color}, #{self.year}, #{self.model}!"
+  end
+end
+
+class MyCar < Vehicle
+  NUMBER_OF_DOORS = 4
+
+  def to_s
+    "My car is a #{self.color}, #{self.year}, #{self.model}!"
+  end
+end
+
+# Classes and Objects Part 2 Question 3
+
+# there is no setter method for the instance variable @name.
+# attr_reader must be changed to attr_writer or attr_accessor to be able to change the value of @name.
+
+class Student
+  def initialize(name, grade)
+    @name = name
+    @grade = grade
+  end
+
+  def better_grade_than?(other_student)
+    grade > other_student.grade
+  end
+
+  protected
+
+  def grade
+    @grade
   end
 
 end
 
-herbie = MyCar.new 1991 "yellow" "VW Bug"
+joe = Student.new("joe", 90)
 
-herbie.change_and_view_color("red")
+bob = Student.new("bob",80)
 
+puts "Well done!" if joe.better_grade_than?(bob)
+puts joe.grade
+
+# Inheritance problem 8
+# hi is a protected method, if the hi method is put above the private reserved word in the class, this should make the hi method available to the object
