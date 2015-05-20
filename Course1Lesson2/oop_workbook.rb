@@ -307,5 +307,20 @@ tabby = Cat.new("tabby")
 
 tabby.to_s
 
-# 5.)
+# 5.) 
+
+# 6.) instead of self.age += 1, we could use @age += 1
+
+# 7.) return in the information method does not add any value
+
+# Intermediate Quiz 1
+
+# 1.) Ben is right because he added an attr_reader method to his BankAccount class.
+
+# 2.) There is no setter method for quantity, so it must be set with the @quantity notation.  
+# 3.) You are altering the public interfaces of the class which could pose problems down the line.
+
+#4.) 
+
+
 
