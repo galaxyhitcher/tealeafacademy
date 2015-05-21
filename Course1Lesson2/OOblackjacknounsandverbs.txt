@@ -6,6 +6,8 @@ Nouns
  - Dealer
     has a: Hand
     hit_or_stay
+    display_hand_with_one_card_face_down
+    deal
  - Deck
     has: 52 cards
     shuffle
