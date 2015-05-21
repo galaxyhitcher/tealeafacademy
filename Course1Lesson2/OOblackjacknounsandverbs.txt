@@ -1,0 +1,16 @@
+Nouns
+
+ - Player
+    has a: Hand
+    hit_or_stay
+ - Dealer
+    has a: Hand
+    hit_or_stay
+ - Deck
+    has: 52 cards
+    shuffle
+ - Hand
+    blackjack?
+    total
+    how_many_cards
+    any_aces?
