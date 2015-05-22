@@ -268,11 +268,27 @@ class Game
     input == 'Y'
   end
 
+  def you_win?(winner)
+    winner == "you"
+  end
+
+  def its_a_push(winner)
+    winner == "push"
+  end
+
+  def increment_players_wallet(bet)
+    @you.cash += 2*bet
+  end
+
+  def push(bet)
+    @you.cash += bet
+  end
+
   def if_player_won_add_to_players_wallet(bet,winner)
-    if winner == "you"
-      @you.cash += 2*bet
-    elsif winner == "push"
-      @you.cash += bet
+    if you_win?(winner)
+      increment_players_wallet(bet)
+    elsif its_a_push(winner)
+      push(bet)
     end
   end
 
