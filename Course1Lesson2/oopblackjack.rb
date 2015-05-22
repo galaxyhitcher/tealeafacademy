@@ -1,7 +1,7 @@
-# TODO: do not allow player to bet more than is in his wallet
 require 'pry'
 class Player
   attr_accessor :hand, :hit, :cash
+
   def initialize(cash = false)
     @hand = Hand.new
     @hit = true
@@ -25,6 +25,7 @@ end
 
 class Deck
   attr_accessor :deck
+
   def initialize
     @deck = []
     ['A','2','3','4','5','6','7','8','9','10','J','Q','K'].each do |rank|
@@ -51,6 +52,7 @@ end
 
 class Hand
   attr_accessor :cards
+
   def initialize
     @cards = []
   end
@@ -127,6 +129,7 @@ end
 
 class Game
   attr_accessor :you, :computer, :deck
+  
   def initialize
     @you = Player.new(get_players_wallet)
     @computer = Player.new
