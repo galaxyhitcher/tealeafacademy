@@ -166,7 +166,7 @@ class Game
   def hit?
     input = gets.chomp
     puts
-    input.upcase == 'Y'
+    input.upcase == 'Y' unless you.bust?
   end
 
   def display_players_hand
@@ -185,14 +185,23 @@ class Game
     @computer.hand.total
   end
 
+  def ask_player_if_they_want_to_hit
+    if !you.bust?
+      puts "Hit? (Y/N)"
+    else
+      puts "You busted, press any key."
+      puts
+    end
+  end
+
   def player_goes
     display_players_hand
-    puts "Hit? (Y/N)"
+    ask_player_if_they_want_to_hit
     while hit?
       deal_to_players_hand
       display_players_hand
-      puts "Hit? (Y/N)"
-    end
+      ask_player_if_they_want_to_hit
+    end 
   end
 
   def computer_goes
@@ -280,14 +289,19 @@ class Game
     @deck = Deck.new
   end
 
+  def initial_betting
+    show_players_wallet
+    bet = get_bet
+    decrement_players_wallet_by(bet)
+    bet
+  end
+
   def play
     another_round = true
     while another_round
       shuffle_deck
       deal_cards
-      show_players_wallet
-      bet = get_bet
-      decrement_players_wallet_by(bet)
+      bet = initial_betting
       player_goes
       computer_goes
       winner = analyze_hands
