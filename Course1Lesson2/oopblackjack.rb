@@ -1,3 +1,4 @@
+# TODO: do not allow player to bet more than is in his wallet
 require 'pry'
 class Player
   attr_accessor :hand, :hit, :cash
@@ -133,6 +134,7 @@ class Game
   end
 
   def get_players_wallet
+    puts
     puts "How much would you like to play with today?"
     cash = gets.chomp.to_i
   end
@@ -142,8 +144,19 @@ class Game
   end
 
   def get_bet
-    puts "How much do you want to bet?"
-    bet = gets.chomp.to_i
+    try_again = true
+    while try_again
+      puts "How much do you want to bet?"
+      bet = gets.chomp.to_i
+      puts
+      if bet > your_wallet
+        puts "That's more than you have in your wallet!  Try again."
+        puts
+      else
+        try_again = false
+      end
+    end
+    bet
   end
 
   def deal_to_players_hand
@@ -152,15 +165,16 @@ class Game
 
   def hit?
     input = gets.chomp
+    puts
     input.upcase == 'Y'
   end
 
   def display_players_hand
-    puts @you.hand.display
+    puts "You have: " + @you.hand.display
   end
 
   def display_computers_hand
-    puts @computer.hand.display
+    puts "Computer has: " + @computer.hand.display
   end
 
   def deal_to_computers_hand
@@ -255,7 +269,9 @@ class Game
   end
 
   def show_players_wallet
-    puts "You have: " + @you.cash.to_s + " dollars."
+    puts
+    puts "You have: " + your_wallet.to_s + " dollars."
+    puts
   end
 
   def shuffle_deck
