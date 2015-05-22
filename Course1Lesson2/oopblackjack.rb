@@ -284,7 +284,7 @@ class Game
     @you.cash += bet
   end
 
-  def if_player_won_add_to_players_wallet(bet,winner)
+  def resolve_bet(bet,winner)
     if you_win?(winner)
       increment_players_wallet(bet)
     elsif its_a_push(winner)
@@ -324,7 +324,7 @@ class Game
       player_goes
       computer_goes
       winner = analyze_hands
-      if_player_won_add_to_players_wallet(bet,winner)
+      resolve_bet(bet,winner)
       another_round = ask_player_if_they_want_to_continue
     end
     show_players_wallet
