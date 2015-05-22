@@ -8,9 +8,19 @@ class Player
       @cash = cash
     end
   end
+
+  def bust?
+    hand.bust?
+  end
+
+  def total
+    hand.total
+  end
+
+  def blackjack?
+    hand.blackjack?
+  end
 end
-
-
 
 class Deck
   attr_accessor :deck
@@ -36,7 +46,6 @@ class Deck
   def shuffle
     @deck = @deck.shuffle
   end
-
 end
 
 class Hand
@@ -45,17 +54,13 @@ class Hand
     @cards = []
   end
 
-  def display_string
+  def display
     printout = ""
     @cards.each do |card|
       printout += card + " "
     end
     printout += "for a total of " + total.to_s
     printout
-  end
-
-  def display_masked_string
-    "This is the dealer's hand: ?? " + @cards[1]
   end
 
   def how_many_cards
@@ -120,196 +125,161 @@ class Hand
 end
 
 class Game
-  attr_accessor :you, :computer, :deck, :you_win
+  attr_accessor :you, :computer, :deck
   def initialize
-    @you = Player.new(get_wallet)
+    @you = Player.new(get_players_wallet)
     @computer = Player.new
     @deck = Deck.new
-    @you_win = false
   end
 
-  def get_wallet
-    puts
-    puts "How much do you want in your wallet today?"
-    input = gets.chomp.to_i
-    puts
-    input
+  def get_players_wallet
+    puts "How much would you like to play with today?"
+    cash = gets.chomp.to_i
   end
 
-  def get_choice
-    puts "Do you want to hit? (Y/N)?"
-    puts
-    choice = gets.chomp
-    puts
-    choice.capitalize == "Y"
-  end
-
-  def check_if_you_are_busted
-    if you.hand.bust?
-      puts you.hand.display_string
-      puts "You busted!  Computer won."
-    end
-  end
-
-  def show_hands
-    puts "Dealer has:"
-    computer.hand.display
-    puts "You have:"
-    you.hand.display
-  end
-
-  def player_goes
-    input = true
-    while input && !you.hand.bust?
-      puts "You have: " + you.hand.display_string
-      if you.hand.how_many_cards == 2
-        puts "Computer has: " + computer.hand.display_masked_string
-      else
-        puts "Computer has: " + computer.hand.display_string
-      end
-      input = get_choice
-      if input
-        @deck.deal(you)
-      end
-    end
-  end
-
-  def check_for_endgame_conditions
-    you.hand.bust?
-  end
-  def computer_goes
-    while (computer.hand.total < you.hand.total) && (computer.hand.total < 17)
-      @deck.deal(computer)
-    end
-  end
-
-  def nobody_busted?
-    !(you.hand.bust? || computer.hand.bust?)
-  end
-
-
-  def analyze_hands
-    puts "You have: " + you.hand.display_string
-    puts "Computer has: " + computer.hand.display_string
-    if anyone_has_blackjack?
-      print_blackjack_message
-    elsif you.hand.total == computer.hand.total && nobody_busted?
-      puts "Both players got the same score, computer wins."
-    elsif you.hand.total > computer.hand.total && nobody_busted?
-      puts "You got the higher score, you won!"
-      @you_win = true
-    elsif computer.hand.total > you.hand.total && nobody_busted?
-      puts "The Computer got the higher score, Computer wins."
-    elsif computer.hand.bust?
-      puts "You didn't bust, you won!"
-      @you_win = true
-    elsif you.hand.bust?
-      puts "You busted, computer won."
-    end
-    puts
-  end
-
-  def print_blackjack_message
-    if you.hand.blackjack? && computer.hand.blackjack?
-      puts "Computer won, but you both had blackjacks."
-    elsif computer.hand.blackjack?
-      puts "Computer has blackjack, computer wins."
-    elsif you.hand.blackjack?
-      puts "You have blackjack!  You win!"
-      @you_win = true
-    end
-  end
-
-  def anyone_has_blackjack?
-    you.hand.blackjack? || computer.hand.blackjack?
-  end
-
-  def check_for_blackjacks
-    print_blackjack_message
-  end
-
-  def increment_wallet(bet)
-    if you_win
-      you.cash += 2*bet
-    end
-    puts "You have: " + you.cash.to_s + " dollars."
-    puts
-  end
-
-  def start_deal
-    deck.start_deal(you,computer)
-  end
-
-  def start_round
-    puts
-    start_deal
-    @you_win = false
-    game_ended = false
+  def your_wallet
+    @you.cash
   end
 
   def get_bet
-    puts "How much do you want to bet on this round?"
+    puts "How much do you want to bet?"
     bet = gets.chomp.to_i
   end
 
-  def decrement_wallet(bet)
-    you.cash -= bet
+  def deal_to_players_hand
+    @deck.deal(you)
   end
 
-  def continue?
-    puts "Do you want to keep playing? (Y/N)"
+  def hit?
     input = gets.chomp
-    puts
     input.upcase == 'Y'
   end
-  def refresh_hands_and_deck
-    you.hand = Hand.new
-    computer.hand = Hand.new
-    self.deck = Deck.new
+
+  def display_players_hand
+    puts @you.hand.display
   end
 
-  def betting
-    bet = get_bet
-    if bet > you.cash
-      puts "That cash bet is more then you have in your wallet!"
-      puts
-      bet = 0
-    end
-    if !(bet > you.cash)
-      decrement_wallet(bet)
-    end
-    
-    bet
+  def display_computers_hand
+    puts @computer.hand.display
   end
 
-  def player_goes_and_computer_goes(is_the_game_ended)
-    player_goes unless is_the_game_ended 
-    game_ended = check_for_endgame_conditions
-    computer_goes unless is_the_game_ended 
+  def deal_to_computers_hand
+    puts @deck.deal(computer)
   end
-    
+
+  def computer_total
+    @computer.hand.total
+  end
+
+  def player_goes
+    display_players_hand
+    puts "Hit? (Y/N)"
+    while hit?
+      deal_to_players_hand
+      display_players_hand
+      puts "Hit? (Y/N)"
+    end
+  end
+
+  def computer_goes
+    display_computers_hand
+    while computer_total < 17
+      deal_to_computers_hand
+      display_computers_hand
+    end
+  end
+
+  def deal_cards
+    @deck.start_deal(you,computer)
+  end
+
+  def blackjack?(player)
+    player.hand.blackjack?
+  end
+
+  def total(player)
+    player.hand.total
+  end
+
+  def bust?(player)
+    player.hand.bust?
+  end
+
+  def analyze_hands
+    if you.blackjack? && computer.blackjack?
+      puts "Both you and the computer got blackjack, so it's a push."
+      "push"
+    elsif computer.blackjack?
+      puts "Computer got blackjack, so computer wins."
+      "computer"
+    elsif you.blackjack?
+      puts "You got blackjack, you win!"
+      "you"
+    elsif you.bust? && computer.bust?
+      puts "Both you and the computer busted, it looks like the computer wins."
+      "computer"
+    elsif you.bust?
+      puts "You busted, you lose."
+      "computer"
+    elsif computer.bust?
+      puts "Computer busted, you win!"
+      "you"
+    elsif you.total > computer.total
+      puts "You have a higher score, you win!"
+      "you"
+    elsif computer.total > you.total
+      puts "Computer has a higher score, computer wins!"
+      "computer"
+    elsif computer.total == you.total
+      puts "You and the computer have the same score, it's a push."
+      "push"
+    end
+  end
+
+  def ask_player_if_they_want_to_continue
+    puts "Do you want to continue? (Y/N)"
+    input = gets.chomp.upcase
+    input == 'Y'
+  end
+
+  def if_player_won_add_to_players_wallet(bet,winner)
+    if winner == "you"
+      @you.cash += 2*bet
+    elsif winner == "push"
+      @you.cash += bet
+    end
+  end
+
+  def decrement_players_wallet_by(bet)
+    @you.cash -= bet
+  end
+
+  def show_players_wallet
+    puts "You have: " + @you.cash.to_s + " dollars."
+  end
+
+  def shuffle_deck
+    @you.hand = Hand.new
+    @computer.hand = Hand.new
+    @deck = Deck.new
+  end
 
   def play
-    keep_playing = true
-
-    while keep_playing
-      bet = betting
-      if bet > 0
-        game_ended = false
-        refresh_hands_and_deck
-        
-        start_round
-        game_ended = anyone_has_blackjack?
-        player_goes_and_computer_goes(game_ended)
-      
-        analyze_hands 
-        increment_wallet(bet)
-      end 
-      keep_playing = continue?
+    another_round = true
+    while another_round
+      shuffle_deck
+      deal_cards
+      show_players_wallet
+      bet = get_bet
+      decrement_players_wallet_by(bet)
+      player_goes
+      computer_goes
+      winner = analyze_hands
+      if_player_won_add_to_players_wallet(bet,winner)
+      another_round = ask_player_if_they_want_to_continue
     end
-    
+    show_players_wallet
   end
-  
 end
 
 battle = Game.new
